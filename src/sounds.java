@@ -1,10 +1,6 @@
-import javax.annotation.processing.SupportedSourceVersion;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 public class sounds {
@@ -13,18 +9,26 @@ public class sounds {
         effects(file,2000);
     }
     public static void effects(String file,int time){
+        effects(file,time,false);
+    }
+    public static void effects(String file,int time,boolean loop){
 
         Thread sound=new Thread(){
             public void run(){
-                try{
-                    Clip clip = AudioSystem.getClip();
+                Clip clip = null;
+                try{;
+                    clip= AudioSystem.getClip();
                     clip.open(AudioSystem.getAudioInputStream(clips.get(file)));
                     clip.start();
-                    Thread.sleep(time);
+                    System.out.println(clip.getMicrosecondLength());
+                    Thread.sleep((int)clip.getMicrosecondLength()/500);
                 }
                 catch (Exception e){
                     e.printStackTrace();
                 }
+                clip.close();
+                if(loop&&!interrupted())
+                    effects(file,time,loop);
             }
         };
         sound.start();
@@ -45,9 +49,12 @@ public class sounds {
         effects("zombie"+i);}
     public static void hurt(){
         effects("hurt");}
+    public static void background(){
+        effects("Background",(11*60*1000)+35000,true);
+    }
 
     public static void getClips() {
-        String[] files={"click","hurt","zombie1","zombie2","shotgun","shotgunHurt1","shotgunHurt2","shotgunHurt0","pistol","pistolHurt1","pistolHurt2","pistolHurt0","rifle","rifleHurt1","rifleHurt2","rifleHurt0"};
+        String[] files={"click","hurt","zombie1","zombie2","shotgun","shotgunHurt1","shotgunHurt2","shotgunHurt0","pistol","pistolHurt1","pistolHurt2","pistolHurt0","rifle","rifleHurt1","rifleHurt2","rifleHurt0","Background"};
         for(String i:files)
             getClip(i);
 
