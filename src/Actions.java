@@ -63,6 +63,11 @@ public class Actions {
     public static void enterName(){
         testWindow.screen.removeAll();
         setCursors.normal();
+        JLabel title=new JLabel("Name: ");
+        title.setForeground(Color.BLACK);
+        title.setFont(new Font(Font.SANS_SERIF,Font.BOLD,30));
+        title.setBounds(testWindow.window.getWidth()/2-(500/2),50,120,40);
+        testWindow.screen.add(title);
         JTextField namef= new JTextField(1);
         namef.addKeyListener(new KeyListener() {
             @Override
@@ -89,7 +94,7 @@ public class Actions {
         namef.setFocusable(true);
         testWindow.screen.setFocusable(true);
         namef.setFont(new Font(Font.SERIF,Font.PLAIN,30));
-        namef.setBounds(testWindow.window.getWidth()/2-(500/2),50,500,40);
+        namef.setBounds(testWindow.window.getWidth()/2-(500/2)+120,50,400-20,40);
         testWindow.screen.add(namef);
         namef.setBackground(Color.LIGHT_GRAY);
         namef.setForeground(Color.WHITE);
