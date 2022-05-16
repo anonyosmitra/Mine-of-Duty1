@@ -29,9 +29,10 @@ public class Zombie {
         entity.setBounds(1200,300,180,280);
         health=new JProgressBar(0,9);
         health.setValue(9);
+        health.setForeground(Color.GREEN);
         speed=20;
         health.setBounds(1200,280,180,20);
-        health.setBackground(Color.GREEN);
+        health.setBackground(Color.WHITE);
         health.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e) {
                 Gun.mouseAction(0,e.getButton(),0,0);
