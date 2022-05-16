@@ -6,12 +6,9 @@ import java.util.HashMap;
 public class sounds {
     static HashMap<String,File> clips=new HashMap<>();
     public static void effects(String file){
-        effects(file,2000);
+        effects(file,false);
     }
-    public static void effects(String file,int time){
-        effects(file,time,false);
-    }
-    public static void effects(String file,int time,boolean loop){
+    public static void effects(String file,boolean loop){
 
         Thread sound=new Thread(){
             public void run(){
@@ -20,7 +17,6 @@ public class sounds {
                     clip= AudioSystem.getClip();
                     clip.open(AudioSystem.getAudioInputStream(clips.get(file)));
                     clip.start();
-                    System.out.println(clip.getMicrosecondLength());
                     Thread.sleep((int)clip.getMicrosecondLength()/500);
                 }
                 catch (Exception e){
@@ -28,7 +24,7 @@ public class sounds {
                 }
                 clip.close();
                 if(loop&&!interrupted())
-                    effects(file,time,loop);
+                    effects(file,loop);
             }
         };
         sound.start();
@@ -41,8 +37,8 @@ public class sounds {
             throw new RuntimeException(e);
         }
     }
-    public static void blankShot(String gun){
-        effects(gun,1000);}
+    public static void shot(String gun){
+        effects(gun);}
     public static void zombieHurt(String gun,int i){
         effects(gun+"Hurt"+i);}
     public static void zombieGrowl(int i){
@@ -50,11 +46,11 @@ public class sounds {
     public static void hurt(){
         effects("hurt");}
     public static void background(){
-        effects("Background",(11*60*1000)+35000,true);
+        effects("Background",true);
     }
 
     public static void getClips() {
-        String[] files={"click","hurt","zombie1","zombie2","shotgun","shotgunHurt1","shotgunHurt2","shotgunHurt0","pistol","pistolHurt1","pistolHurt2","pistolHurt0","rifle","rifleHurt1","rifleHurt2","rifleHurt0","Background"};
+        String[] files={"click","hurt","zombie1","zombie2","shotgun","pistol","rifle","Background","zombieHurt0","zombieHurt1","zombieHurt2"};
         for(String i:files)
             getClip(i);
 

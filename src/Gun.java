@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Gun {
+    static String playerName;
     static int health,score;
     static JPanel pan=new JPanel(null);
     static JLabel scoreCount=new JLabel();
@@ -94,13 +95,24 @@ public class Gun {
         score=score+add;
         scoreCount.setText(Integer.toString(score));
     }
+    public static void makeGuns(){
+        guns=new ArrayList<>();
+        current=new Gun("pistol",2,8,2000,'1');
+        new Gun("rifle",1,15,5000,'2');
+        new Gun("shotgun",3,2,8000,'3');
+    }
     public static void makeGame(){
         health=3;
         score=0;
+        JLabel player=new JLabel(playerName);
+        player.setFont(new Font(Font.SANS_SERIF,Font.BOLD,40));
+        player.setForeground(Color.decode("#fc6f03"));
+        player.setBounds(50,100,300,45);
+        testWindow.screen.add(player);
         scoreCount.setFont(new Font(Font.SANS_SERIF,Font.BOLD,40));
-        scoreCount.setForeground(Color.YELLOW);
+        scoreCount.setForeground(Color.decode("#fc6f03"));
         scoreCount.setHorizontalAlignment(SwingConstants.RIGHT);
-        scoreCount.setBounds(1000,100,300,50);
+        scoreCount.setBounds(1000,100,300,45);
         updateScore(0);
         testWindow.screen.add(scoreCount);
         Image a,b;
@@ -112,10 +124,7 @@ public class Gun {
         }
         fullH=new ImageIcon(a.getScaledInstance(40,40, Image.SCALE_DEFAULT));
         emptyH=new ImageIcon(b.getScaledInstance(40,40, Image.SCALE_DEFAULT));
-        guns=new ArrayList<>();
-        current=new Gun("pistol",2,8,2000,'1');
-        new Gun("rifle",1,15,5000,'2');
-        new Gun("shotgun",3,2,8000,'3');
+        makeGuns();
         pan=new JPanel(null);
         pan.setBounds(0,testWindow.screen.getHeight()-150,testWindow.screen.getWidth(),150);
         pan.setOpaque(false);
@@ -162,7 +171,7 @@ public class Gun {
     public static void shot(){
         if(current.count>0 && !current.reloading.isAlive()) {
             current.count--;
-            sounds.blankShot(current.name);
+            sounds.shot(current.name);
             makePanel();
         }
         if(current.count==0)
@@ -172,10 +181,17 @@ public class Gun {
         if(current.count>0 && !current.reloading.isAlive()) {
             current.count--;
             v= v - current.damage;
-            if(v<=0)
-                sounds.zombieHurt(current.name,0);
-            else
-                sounds.zombieHurt(current.name,v>(max/2)? 2 : 1);
+            sounds.shot(current.name);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if(v<=0){
+                sounds.effects("zombieHurt0");}
+            else{
+                sounds.effects("zombieHurt"+(v>(max/2)? 2 : 1));
+                }
             makePanel();
         }
         if(current.count==0)
