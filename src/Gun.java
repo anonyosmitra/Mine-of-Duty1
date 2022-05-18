@@ -48,6 +48,7 @@ public class Gun {
                 }
                 if(!isInterrupted()&&!Inter){
                     count=bullets;
+                    sounds.effects("reload");
                     makePanel();
                 }
             }
@@ -185,7 +186,9 @@ public class Gun {
             current.reload();
     }
     public static int shot(int v,int max){
-        if(current.count>0 && !current.reloading.isAlive()) {
+        if(current.count>0) {
+            if(current.reloading.isAlive())
+                current.reloading.interrupt();
             current.count--;
             v= v - current.damage;
             sounds.shot(current.name);

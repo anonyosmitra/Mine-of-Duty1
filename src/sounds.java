@@ -50,7 +50,7 @@ public class sounds {
     }
 
     public static void getClips() {
-        String[] files={"click","hurt","zombie1","zombie2","shotgun","pistol","rifle","Background","zombieHurt0","zombieHurt1","zombieHurt2"};
+        String[] files={"click","hurt","zombie1","zombie2","shotgun","pistol","rifle","Background","zombieHurt0","zombieHurt1","zombieHurt2","reload"};
         for(String i:files)
             getClip(i);
 
