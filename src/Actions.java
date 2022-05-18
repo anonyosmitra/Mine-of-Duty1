@@ -1,10 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Actions {
     private static JButton makeButton(String text){
@@ -191,6 +187,9 @@ public class Actions {
         });
         back.setFont(new Font(Font.SANS_SERIF,Font.BOLD,30));
         back.setBounds(testWindow.window.getWidth()/12-(200/12),10,200,40);
+        JScrollPane sb=scores.makePan();
+        sb.setBounds(testWindow.window.getWidth()/12-(200/12),100,1000,400);
+        testWindow.screen.add(sb);
         testWindow.screen.add(back);
         testWindow.screen.revalidate();
         testWindow.screen.repaint();
@@ -242,6 +241,8 @@ public class Actions {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                Gun.health=0;
+                Zombie.zombieGenerator.interrupt();
                 Zombie.killAll();
                 sounds.click();
                 mainMenu();
@@ -254,12 +255,12 @@ public class Actions {
         testWindow.screen.add(back);
         Gun.makeGame();
         testWindow.screen.addMouseListener(msl);
+        testWindow.screen.requestFocus();
         testWindow.screen.addKeyListener(kls);
         testWindow.screen.addMouseWheelListener(mwl);
-
         testWindow.screen.revalidate();
         testWindow.screen.repaint();
-        new Zombie();
+        Zombie.start();
     }
     public static void clearScreen(){
         testWindow.screen.removeAll();

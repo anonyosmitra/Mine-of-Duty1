@@ -61,7 +61,6 @@ public class Gun {
         JLabel gunPic = new JLabel(current.gunImg);
         gunPic.setBounds(pan.getWidth()/2,pan.getHeight()-100,100,100);
         JLabel bulletPic = new JLabel(current.bulletImg);
-        //bulletPic.setBounds(pan.getWidth()-200,testWindow.screen.getHeight()-200,50,200);
         bulletPic.setBounds(pan.getWidth()-50,0,50,200);
         JLabel bulletCount=new JLabel(current.count+"/∞");
         bulletCount.setFont(new Font(Font.SANS_SERIF,Font.BOLD,25));
@@ -90,6 +89,12 @@ public class Gun {
         sounds.hurt();
         health--;
         makePanel();
+        if(health==0){
+            Zombie.zombieGenerator.interrupt();
+            Zombie.killAll();
+            new scores(playerName,score);
+            Actions.scoreBoard();
+        }
     }
     public static void updateScore(int add){
         score=score+add;
@@ -97,9 +102,9 @@ public class Gun {
     }
     public static void makeGuns(){
         guns=new ArrayList<>();
-        current=new Gun("pistol",2,8,2000,'1');
-        new Gun("rifle",1,15,5000,'2');
-        new Gun("shotgun",3,2,8000,'3');
+        current=new Gun("pistol",3,8,2000,'1');
+        new Gun("rifle",4,15,4000,'2');
+        new Gun("shotgun",5,2,6000,'3');
     }
     public static void makeGame(){
         health=3;
@@ -136,8 +141,8 @@ public class Gun {
         for(Gun g:guns)
             if(g.hotkey==keyChar)
                 swapGun(g);
-        if(keyChar=='r')
-            reloadCurrent();
+        if(keyChar=='r'){
+            reloadCurrent();}
     }
     public static int mouseAction(int rot,int button,int v,int max){
         int c=guns.indexOf(current),ne=c;
@@ -158,7 +163,7 @@ public class Gun {
                 return shot(v,max);
         else if(button==3)
             reloadCurrent();
-        return 0;
+        return v;
     }
     public static void swapGun(Gun g){
         if(current.reloading.isAlive()){
@@ -169,12 +174,14 @@ public class Gun {
         makePanel();
     }
     public static void shot(){
-        if(current.count>0 && !current.reloading.isAlive()) {
+        if(current.count>0) {
+            if(current.reloading.isAlive())
+                current.reloading.interrupt();
             current.count--;
             sounds.shot(current.name);
             makePanel();
         }
-        if(current.count==0)
+        if(current.count==0 && !current.reloading.isAlive())
             current.reload();
     }
     public static int shot(int v,int max){

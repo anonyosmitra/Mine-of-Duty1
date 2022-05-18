@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -32,7 +33,12 @@ public class testWindow extends JFrame {
         add(jp);
         screen.setOpaque(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                scores.writeScores();
+                System.exit(0);
+            }
+        });
         setResizable(false);
         setVisible(true);
         Actions.mainMenu();
